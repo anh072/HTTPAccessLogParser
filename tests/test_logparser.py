@@ -1,12 +1,16 @@
+from pathlib import Path
 from typing import List
 import unittest
 
 from parser import IP, URL, HTTPAccessLogParserWithHeap
 
 
+p = Path(__file__).resolve().parent
+
+
 class HTTPAccessLogParserWithHeapTest(unittest.TestCase):
     def setUp(self) -> None:
-        file = "tests/access.log"
+        file = p / "access.log"
         self.parser = HTTPAccessLogParserWithHeap()
         self.parser.parse(file)
 
@@ -30,7 +34,7 @@ class HTTPAccessLogParserWithHeapTest(unittest.TestCase):
 
 class HTTPAccessLogParserWithHeapEmptyDataTest(unittest.TestCase):
     def setUp(self) -> None:
-        file = "tests/empty.access.log"
+        file = p / "empty.access.log"
         self.parser = HTTPAccessLogParserWithHeap()
         self.parser.parse(file)
 
@@ -50,7 +54,7 @@ class HTTPAccessLogParserWithHeapEmptyDataTest(unittest.TestCase):
 
 class HTTPAccessLogParserWithHeapLessThanKTest(unittest.TestCase):
     def setUp(self) -> None:
-        file = "tests/less_than_three.access.log"
+        file = p / "less_than_three.access.log"
         self.parser = HTTPAccessLogParserWithHeap()
         self.parser.parse(file)
 

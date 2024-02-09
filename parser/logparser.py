@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 from collections import defaultdict
 from dataclasses import dataclass, field
 from heapq import heappop, heappush
+from pathlib import Path
 import re
 from typing import DefaultDict, List, TypeAlias
 
@@ -17,7 +18,15 @@ class IHTTPAccessLogParser(ABC):
     )
 
     @abstractmethod
-    def parse(self, filePath: str) -> None:
+    def parse(self, filePath: Path) -> None:
+        pass
+
+    @abstractmethod
+    def getTopKMostActiveIPs(self, k: int) -> List[IP]:
+        pass
+
+    @abstractmethod
+    def getTopKVisitedUrls(self, k: int) -> List[URL]:
         pass
 
 
@@ -26,15 +35,20 @@ class HTTPAccessLogParserWithHeap(IHTTPAccessLogParser):
     ips: DefaultDict[IP, int] = field(default_factory=lambda: defaultdict(int))
     urls: DefaultDict[URL, int] = field(default_factory=lambda: defaultdict(int))
 
-    def parse(self, filePath: str) -> None:
-        with open(filePath, "r") as file:
-            for line in file:
-                result = re.match(self.regexPattern, line)
-                if result:
-                    ip = result.group(1)
-                    url = result.group(4)
-                    self.ips[ip] += 1
-                    self.urls[url] += 1
+    def parse(self, filePath: Path) -> None:
+        try:
+            with filePath.open(mode="r", encoding="utf-8") as file:
+                for line in file:
+                    result = re.match(self.regexPattern, line)
+                    if result:
+                        ip = result.group(1)
+                        url = result.group(4)
+                        self.ips[ip] += 1
+                        self.urls[url] += 1
+        except FileNotFoundError as e:
+            print(f"File {filePath.name} is not found")
+        except:
+            print(f"Cannot open file {filePath.name}")
 
     def getTopKMostActiveIPs(self, k: int) -> List[IP]:
         heap: List[tuple[int, IP]] = []
@@ -43,7 +57,7 @@ class HTTPAccessLogParserWithHeap(IHTTPAccessLogParser):
             if len(heap) > k:
                 heappop(heap)
         res = []
-        for i in range(k):
+        for _ in range(k):
             if len(heap):
                 _, ip = heappop(heap)
                 res.append(ip)
@@ -57,7 +71,7 @@ class HTTPAccessLogParserWithHeap(IHTTPAccessLogParser):
             if len(heap) > k:
                 heappop(heap)
         res = []
-        for i in range(k):
+        for _ in range(k):
             if len(heap):
                 _, url = heappop(heap)
                 res.append(url)

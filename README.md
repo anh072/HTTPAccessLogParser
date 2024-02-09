@@ -6,6 +6,22 @@ This solution defines the following entities:
 
 Even though the problem asks for top 3, the solution supports retrieving the top K ip addresses and urls. This allows for extensions in case users want to retrieve more than 3. Also, an interface `IHTTPAccessLogParser` is declared to support dependency injection, in case we want to implement the LogParser in a different way instead of MinHeap. This solution allows getting top K elements across multiple log files.
 
+## Usage
+The `parse()` takes in a `Path` object from `pathlib` module which is OS agnostic. Thus, this code should be working on both Windows and Unix
+
+Example usage of the library
+```
+from pathlib import Path
+from parser import HTTPAccessLogParserWithHeap
+
+
+parser = HTTPAccessLogParserWithHeap()
+logDir = "/var/log/apache"
+files = Path(logDir).glob("**/*.log")
+for f in files:
+  parser.parse(f)
+```
+
 ## Implementation Discussion
 There are a few different ways to implement top K elements problem
 * Sorting
