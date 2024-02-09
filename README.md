@@ -23,6 +23,7 @@ for f in files:
 ```
 
 ## Implementation Discussion
+
 There are a few different ways to implement top K elements problem
 * Sorting
 * Heap
@@ -35,19 +36,20 @@ The worst case time and space complexities for getting top K elements are summar
 | Space         | O(N)          | O(K)          | O(N)          |
 
 With balanced BST, it offers the best performance for get. However, heap offers the best memory usage.
+With the heap implementation, the IPs and URLs are compared based on their number of occurrences. If they have equal number of occurences, they will be ranked lexicographically.
 
 ## Get Started
-Note: This project was written with Python 3.11
+Note: This project was written with Python 3.12.1
 
-You can install Python version manager `pyenv` following this [installation guide](https://github.com/pyenv/pyenv?tab=readme-ov-file#installation) and then install Python 3.11
+You can install Python version manager `pyenv` following this [installation guide](https://github.com/pyenv/pyenv?tab=readme-ov-file#installation) and then install Python 3.12.1
 ```
-pyenv install 3.11
-pyenv global 3.11
+pyenv install 3.12.1
+pyenv global 3.12.1
 ```
 
 Create and access a virtual environment
 ```
-python3 -m venv venv
+python3 -m venv .venv
 source venv/bin/activate
 ```
 
