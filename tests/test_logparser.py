@@ -15,21 +15,21 @@ class HTTPAccessLogParserWithHeapTest(unittest.TestCase):
         self.parser.parse(file)
 
     def test_get_num_unique_ips(self) -> None:
-        self.assertEqual(self.parser.getNumOfUniqueIPs(), 11)
+        self.assertEqual(self.parser.get_number_of_unique_ips(), 11)
 
     def test_get_most_active_ips(self) -> None:
-        expectedResult: List[IP] = ["168.41.191.40", "72.44.32.10", "50.112.00.11"]
-        actualResult = self.parser.getTopKMostActiveIPs(3)
-        self.assertListEqual(actualResult, expectedResult)
+        expected_result: List[IP] = ["168.41.191.40", "72.44.32.10", "50.112.00.11"]
+        actual_result = self.parser.get_top_k_most_active_ips(3)
+        self.assertListEqual(actual_result, expected_result)
 
     def test_get_most_visited_urls(self) -> None:
-        expectedResult: List[URL] = [
+        expected_result: List[URL] = [
             "/docs/manage-websites/",
             "http://example.net/faq/",
             "http://example.net/blog/category/meta/",
         ]
-        actualResult = self.parser.getTopKVisitedUrls(3)
-        self.assertListEqual(actualResult, expectedResult)
+        actual_result = self.parser.get_top_k_visited_urls(3)
+        self.assertListEqual(actual_result, expected_result)
 
 
 class HTTPAccessLogParserWithHeapEmptyDataTest(unittest.TestCase):
@@ -39,17 +39,17 @@ class HTTPAccessLogParserWithHeapEmptyDataTest(unittest.TestCase):
         self.parser.parse(file)
 
     def test_get_num_unique_ips(self) -> None:
-        self.assertEqual(self.parser.getNumOfUniqueIPs(), 0)
+        self.assertEqual(self.parser.get_number_of_unique_ips(), 0)
 
     def test_get_most_active_ips(self) -> None:
-        expectedResult: List[IP] = []
-        actualResult = self.parser.getTopKMostActiveIPs(3)
-        self.assertListEqual(actualResult, expectedResult)
+        expected_result: List[IP] = []
+        actual_result = self.parser.get_top_k_most_active_ips(3)
+        self.assertListEqual(actual_result, expected_result)
 
     def test_get_most_visited_urls(self) -> None:
-        expectedResult: List[URL] = []
-        actualResult = self.parser.getTopKVisitedUrls(3)
-        self.assertListEqual(actualResult, expectedResult)
+        expected_result: List[URL] = []
+        actual_result = self.parser.get_top_k_visited_urls(3)
+        self.assertListEqual(actual_result, expected_result)
 
 
 class HTTPAccessLogParserWithHeapLessThanKTest(unittest.TestCase):
@@ -59,14 +59,14 @@ class HTTPAccessLogParserWithHeapLessThanKTest(unittest.TestCase):
         self.parser.parse(file)
 
     def test_get_num_unique_ips(self) -> None:
-        self.assertEqual(self.parser.getNumOfUniqueIPs(), 2)
+        self.assertEqual(self.parser.get_number_of_unique_ips(), 2)
 
     def test_get_most_active_ips(self) -> None:
-        expectedResult: List[IP] = ["177.71.128.21", "168.41.191.40"]
-        actualResult = self.parser.getTopKMostActiveIPs(3)
-        self.assertListEqual(actualResult, expectedResult)
+        expected_result: List[IP] = ["177.71.128.21", "168.41.191.40"]
+        actual_result = self.parser.get_top_k_most_active_ips(3)
+        self.assertListEqual(actual_result, expected_result)
 
     def test_get_most_visited_urls(self) -> None:
-        expectedResult: List[URL] = ["http://example.net/faq/", "/intranet-analytics/"]
-        actualResult = self.parser.getTopKVisitedUrls(3)
-        self.assertListEqual(actualResult, expectedResult)
+        expected_result: List[URL] = ["http://example.net/faq/", "/intranet-analytics/"]
+        actual_result = self.parser.get_top_k_visited_urls(3)
+        self.assertListEqual(actual_result, expected_result)

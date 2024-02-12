@@ -13,20 +13,24 @@ URL: TypeAlias = str
 
 @dataclass
 class IHTTPAccessLogParser(ABC):
-    regexPattern: str = (
+    regex_pattern: str = (
         r"^(\S*).*\[(.*)\]\s\"(\S*)\s(\S*)\s([^\"]*)\"\s(\S*)\s(\S*)\s\"([^\"]*)\"\s\"([^\"]*)\".*$"
     )
 
     @abstractmethod
-    def parse(self, filePath: Path) -> None:
+    def parse(self, file_path: Path) -> None:
         pass
 
     @abstractmethod
-    def getTopKMostActiveIPs(self, k: int) -> List[IP]:
+    def get_top_k_most_active_ips(self, k: int) -> List[IP]:
         pass
 
     @abstractmethod
-    def getTopKVisitedUrls(self, k: int) -> List[URL]:
+    def get_top_k_visited_urls(self, k: int) -> List[URL]:
+        pass
+
+    @abstractmethod
+    def get_number_of_unique_ips(self) -> int:
         pass
 
 
@@ -35,25 +39,25 @@ class HTTPAccessLogParserWithHeap(IHTTPAccessLogParser):
     ips: DefaultDict[IP, int] = field(default_factory=lambda: defaultdict(int))
     urls: DefaultDict[URL, int] = field(default_factory=lambda: defaultdict(int))
 
-    def parse(self, filePath: Path) -> None:
+    def parse(self, file_path: Path) -> None:
         try:
-            with filePath.open(mode="r", encoding="utf-8") as file:
+            with file_path.open(mode="r", encoding="utf-8") as file:
                 for line in file:
-                    result = re.match(self.regexPattern, line)
+                    result = re.match(self.regex_pattern, line)
                     if result:
                         ip = result.group(1)
                         url = result.group(4)
                         self.ips[ip] += 1
                         self.urls[url] += 1
         except FileNotFoundError as e:
-            print(f"File {filePath.name} is not found")
+            print(f"File {file_path.name} is not found")
         except:
-            print(f"Cannot open file {filePath.name}")
+            print(f"Cannot open file {file_path.name}")
 
-    def getTopKMostActiveIPs(self, k: int) -> List[IP]:
+    def get_top_k_most_active_ips(self, k: int) -> List[IP]:
         heap: List[tuple[int, IP]] = []
-        for ip, numOccurences in self.ips.items():
-            heappush(heap, (numOccurences, ip))
+        for ip, num_occurences in self.ips.items():
+            heappush(heap, (num_occurences, ip))
             if len(heap) > k:
                 heappop(heap)
         res = []
@@ -64,10 +68,10 @@ class HTTPAccessLogParserWithHeap(IHTTPAccessLogParser):
         res.reverse()
         return res
 
-    def getTopKVisitedUrls(self, k: int) -> List[URL]:
+    def get_top_k_visited_urls(self, k: int) -> List[URL]:
         heap: List[tuple[int, URL]] = []
-        for url, numOccurences in self.urls.items():
-            heappush(heap, (numOccurences, url))
+        for url, num_occurences in self.urls.items():
+            heappush(heap, (num_occurences, url))
             if len(heap) > k:
                 heappop(heap)
         res = []
@@ -78,5 +82,5 @@ class HTTPAccessLogParserWithHeap(IHTTPAccessLogParser):
         res.reverse()
         return res
 
-    def getNumOfUniqueIPs(self) -> int:
+    def get_number_of_unique_ips(self) -> int:
         return len(self.ips)
