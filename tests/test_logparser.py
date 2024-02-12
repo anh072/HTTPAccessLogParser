@@ -57,16 +57,17 @@ class HTTPAccessLogParserWithHeapLessThanKTest(unittest.TestCase):
         file = p / "less_than_three.access.log"
         self.parser = HTTPAccessLogParserWithHeap()
         self.parser.parse(file)
+        self.k = 3
 
     def test_get_num_unique_ips(self) -> None:
         self.assertEqual(self.parser.get_number_of_unique_ips(), 2)
 
     def test_get_most_active_ips(self) -> None:
         expected_result: List[IP] = ["177.71.128.21", "168.41.191.40"]
-        actual_result = self.parser.get_top_k_most_active_ips(3)
+        actual_result = self.parser.get_top_k_most_active_ips(self.k)
         self.assertListEqual(actual_result, expected_result)
 
     def test_get_most_visited_urls(self) -> None:
         expected_result: List[URL] = ["http://example.net/faq/", "/intranet-analytics/"]
-        actual_result = self.parser.get_top_k_visited_urls(3)
+        actual_result = self.parser.get_top_k_visited_urls(self.k)
         self.assertListEqual(actual_result, expected_result)
