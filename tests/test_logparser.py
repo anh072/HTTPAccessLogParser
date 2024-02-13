@@ -52,7 +52,7 @@ class HTTPAccessLogParserWithHeapEmptyDataTest(unittest.TestCase):
         self.assertListEqual(actual_result, expected_result)
 
 
-class HTTPAccessLogParserWithHeapLessThanKTest(unittest.TestCase):
+class HTTPAccessLogParserWithHeapLessThanThreeTest(unittest.TestCase):
     def setUp(self) -> None:
         file = p / "less_than_three.access.log"
         self.parser = HTTPAccessLogParserWithHeap()

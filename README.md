@@ -38,7 +38,21 @@ The worst case time and space complexities for getting top K elements are summar
 With balanced BST, it offers the best performance for get. However, heap offers the best memory usage.
 With the heap implementation, the IPs and URLs are compared based on their number of occurrences. If they have equal number of occurences, they will be ranked lexicographically.
 
-## Get Started
+## Quick run with Docker
+
+This repo makes use of the [3musketeers](https://github.com/flemay/3musketeers) for CI/CD
+
+To run the program
+```
+make run
+```
+
+To run unittests
+```
+make tests
+```
+
+## Development
 Note: This project was written with Python 3.12.1
 
 You can install Python version manager `pyenv` following this [installation guide](https://github.com/pyenv/pyenv?tab=readme-ov-file#installation) and then install Python 3.12.1
